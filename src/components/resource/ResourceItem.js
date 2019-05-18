@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, TouchableOpacity, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { setResources } from '../../state/actionCreators';
-import writeResourceData from '../../data/firebase';
+import { writeResourceData } from '../../data/firebase';
 import styles from './ResourceItem.scss';
+
 
 class ResourceItem extends Component {
   constructor(props) {
@@ -13,14 +14,50 @@ class ResourceItem extends Component {
   }
 
   onSubmit = () => {
+    // fetch here too: getResourceData
     const { resources } = this.props;
-    this.props.setResources(resources);
-    writeResourceData(resources);
+    console.log(resources);
+    const arr = resources.slice();
+    arr.push({
+      title: 'free aples',
+      tags: ['organice'],
+      description: 'yum 😋',
+      price: {
+        amount: 1,
+        currency: 'EUR',
+      },
+      quantity: {
+        amount: 10,
+        unit: 'kg',
+      },
+      place: {
+        id: '1',
+        name: 'Musterstr. 12',
+        address: 'Musterstr. 12, 12345 Berlin, Deutschland',
+        location: {
+          latitude: 52.3918567,
+          longitude: 13.1239394
+        },
+      }
+    });
+    writeResourceData(arr);
+    this.props.navigation.navigate('Map');
   };
 
   render() {
     return (
-      <View style={styles.container} />
+      <View style={styles.container}>
+        <TouchableOpacity
+          style={[styles.Button, { bottom: 30, right: 30 }]}
+          onPress={this.onSubmit}
+        >
+          <Text
+            style={styles.Button__text}
+          >
+            +
+          </Text>
+        </TouchableOpacity>
+      </View>
     );
   }
 }

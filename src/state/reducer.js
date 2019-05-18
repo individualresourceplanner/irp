@@ -1,10 +1,7 @@
 import * as actionTypes from './actionTypes';
 
 const initialState = {
-  location: {
-    latitude: 52.3918567,
-    longitude: 13.1239394,
-  },
+  location: {},
   resources: [],
 };
 

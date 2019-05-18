@@ -4,7 +4,7 @@ import { View, TouchableOpacity, Text } from 'react-native';
 import { MapView, Icon } from 'expo';
 import ResourceMarker from './ResourceMarker';
 import { setLocation, setResources } from '../../state/actionCreators';
-import getResourceData from '../../data/firebase';
+import { getResourceData } from '../../data/firebase';
 import styles from './Map.scss';
 
 const { PROVIDER_GOOGLE } = MapView;
@@ -17,22 +17,39 @@ const initialRegion = {
 };
 
 class Map extends Component {
+  constructor(props) {
+    super(props);
+
+    this.onDataReceive = this.onDataReceive.bind(this);
+  }
+
+  componentDidMount() {
+    getResourceData(this.onDataReceive);
+  }
+
   onLocationChange = (element) => {
     const { latitude, longitude } = element.nativeEvent.coordinate;
-    this.props.setLocation({
-      latitude,
-      longitude,
-    });
+    const location = {
+      latitude: latitude.toFixed(2),
+      longitude: longitude.toFixed(2),
+    };
+    if (location !== this.props.location) {
+      this.props.setLocation(location);
+    }
   };
 
-  onRefresh = () => {
-    this.props.setResources(getResourceData());
+  onDataReceive = (data) => {
+    this.props.setResources(data.resources);
   };
 
   renderResources = () => {
-    return this.props.resources.map((resource) => {
-      return <ResourceMarker key={resource.id} resource={resource} />;
-    });
+    const { resources } = this.props;
+    if (resources.length > 0) {
+      return resources.map((resource) => {
+        return <ResourceMarker key={resource.id} resource={resource} />;
+      });
+    }
+    return null;
   };
 
   render() {
@@ -40,10 +57,10 @@ class Map extends Component {
       <View style={styles.container}>
         <TouchableOpacity
           style={[styles.Button, { bottom: 30, left: 30 }]}
-          onPress={this.onRefresh}
+          onPress={() => getResourceData(this.onDataReceive)}
         >
           <Icon.Ionicons
-            name="refresh"
+            name="ios-refresh"
             size={30}
           />
         </TouchableOpacity>
@@ -77,7 +94,6 @@ class Map extends Component {
     );
   }
 }
-
 
 const mapDispatchToProps = dispatch => ({
   setLocation: (location) => { dispatch(setLocation(location)); },

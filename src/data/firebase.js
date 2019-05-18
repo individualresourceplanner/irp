@@ -1,15 +1,26 @@
-import Firebase from 'firebase';
+import firebase from 'firebase';
+import 'firebase/firestore';
+import firebaseConfig from '../../firebase.config';
 
-export function writeResourceData() {
-  Firebase.database().ref('/').set(this.state);
-  console.log('DATA SAVED');
+firebase.initializeApp(firebaseConfig);
+
+const database = firebase.firestore();
+
+export function writeResourceData(resources) {
+  const file = database.collection('Resources').doc('A69bBAIDLL97R9f1MhwI');
+  file.set({ resources });
 }
 
-export function getResourceData() {
-  const ref = Firebase.database().ref('/');
-  ref.on('value', (snapshot) => {
-    const state = snapshot.val();
-    this.setState(state);
-  });
-  console.log('DATA RETRIEVED');
+export function getResourceData(callback) {
+  const file = database.collection('Resources').doc('A69bBAIDLL97R9f1MhwI');
+  file.get()
+    .then((doc) => {
+      if (!doc.exists) {
+        console.log('No such document!');
+      }
+      callback(doc.data());
+    })
+    .catch((err) => {
+      console.log('Error getting document', err);
+    });
 }
