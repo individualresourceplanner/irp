@@ -49,15 +49,6 @@ class Map extends Component {
     return (
       <View style={styles.container}>
         <TouchableOpacity
-          style={[styles.Button, { bottom: 30, left: 30 }]}
-          onPress={this.updateResources}
-        >
-          <Icon.Ionicons
-            name="ios-refresh"
-            size={30}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
           style={[styles.Button, { bottom: 30, right: 30 }]}
           onPress={() => this.props.navigation.navigate('Resource')}
         >
