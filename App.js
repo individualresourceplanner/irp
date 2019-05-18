@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import reducer from './src/state/reducer';
 import AppNavigator from './src/AppNavigator';
+import { StyleSheet, Text, View } from 'react-native';
 
 const store = createStore(reducer);
 
