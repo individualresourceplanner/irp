@@ -6,21 +6,35 @@ firebase.initializeApp(firebaseConfig);
 
 const database = firebase.firestore();
 
-export function writeResourceData(resources) {
-  const file = database.collection('Resources').doc('A69bBAIDLL97R9f1MhwI');
-  file.set({ resources });
+export function addResource(resource) {
+  console.log('adding resource: ', resource);
+  return database.collection('Resources').add(resource);
 }
 
-export function getResourceData(callback) {
-  const file = database.collection('Resources').doc('A69bBAIDLL97R9f1MhwI');
-  file.get()
-    .then((doc) => {
-      if (!doc.exists) {
-        console.log('No such document!');
+export function getResourceData() {
+  return database.collection('Resources').get().then((querySnapshot) => {
+    console.log('fetched resources:');
+    const resources = [];
+    querySnapshot.forEach((doc) => {
+      const resource = doc.data();
+      resource.id = doc.id;
+
+      if (validateResource(resource)) {
+        resources.push(resource);
+      } else {
+        console.warn('invalid resource: ', resource);
       }
-      callback(doc.data());
-    })
-    .catch((err) => {
-      console.log('Error getting document', err);
     });
+    return resources;
+  });
+}
+
+function validateResource(resource) {
+  if (!resource.title) return false;
+  if (!resource.tags) return false;
+  if (!resource.description) return false;
+  if (!resource.place) return false;
+  if (!resource.place.location) return false;
+
+  return true;
 }

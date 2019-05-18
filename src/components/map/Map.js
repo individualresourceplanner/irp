@@ -17,14 +17,8 @@ const initialRegion = {
 };
 
 class Map extends Component {
-  constructor(props) {
-    super(props);
-
-    this.onDataReceive = this.onDataReceive.bind(this);
-  }
-
   componentDidMount() {
-    getResourceData(this.onDataReceive);
+    this.updateResources();
   }
 
   onLocationChange = (element) => {
@@ -38,8 +32,12 @@ class Map extends Component {
     }
   };
 
-  onDataReceive = (data) => {
-    this.props.setResources(data.resources);
+  updateResources = () => {
+    getResourceData().then((resources) => {
+      this.props.setResources(resources);
+    }).catch((e) => {
+      console.log('ERROR Failed to fetch resource data: ', e);
+    });
   };
 
   renderResources = () => {
@@ -57,7 +55,7 @@ class Map extends Component {
       <View style={styles.container}>
         <TouchableOpacity
           style={[styles.Button, { bottom: 30, left: 30 }]}
-          onPress={() => getResourceData(this.onDataReceive)}
+          onPress={this.updateResources}
         >
           <Icon.Ionicons
             name="ios-refresh"

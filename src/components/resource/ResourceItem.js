@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { setResources } from '../../state/actionCreators';
-import { writeResourceData } from '../../data/firebase';
+import { addResource } from '../../data/firebase';
 import styles from './ResourceItem.scss';
 
 
@@ -14,21 +14,18 @@ class ResourceItem extends Component {
   }
 
   onSubmit = () => {
-    // fetch here too: getResourceData
-    const { resources } = this.props;
-    console.log(resources);
-    const arr = resources.slice();
-    arr.push({
-      title: 'free aples',
-      tags: ['organice'],
+    const resource = {
+      id: '1',
+      title: 'Apples',
+      tags: ['food', 'fruit', 'fresh'],
       description: 'yum 😋',
       price: {
-        amount: 1,
-        currency: 'EUR',
+        value: '1€',
+        unit: 'kg'
       },
-      quantity: {
-        amount: 10,
-        unit: 'kg',
+      stock: {
+        value: 100,
+        unit: 'kg'
       },
       place: {
         id: '1',
@@ -39,8 +36,15 @@ class ResourceItem extends Component {
           longitude: 13.1239394
         },
       }
+    };
+    addResource(resource).then(() => {
+      console.log('Added new resource: ', resource);
+      this.props.resources.push(resource);
+      this.props.setResources(this.props.resources);
+    }).catch((e) => {
+      console.warn('ERROR Adding new resource: ', e);
     });
-    writeResourceData(arr);
+
     this.props.navigation.navigate('Map');
   };
 
