@@ -1,7 +1,10 @@
 import * as actionTypes from './actionTypes';
 
 const initialState = {
-  location: '',
+  location: {
+    latitude: 52.3918567,
+    longitude: 13.1239394,
+  },
 };
 
 function reducer(state = initialState, action) {

@@ -1,31 +1,74 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, TouchableOpacity, Text } from 'react-native';
-import { MapView, Location, Permissions } from 'expo';
+import { MapView } from 'expo';
 import { setLocation } from '../../state/actionCreators';
 import styles from './Map.scss';
+import ResourceMarker from './ResourceMarker';
+
+
+const { PROVIDER_GOOGLE } = MapView;
+
+const initialRegion = {
+  latitude: 7.3697,
+  longitude: 12.3547,
+  latitudeDelta: 1.5,
+  longitudeDelta: 0.75,
+};
 
 class Map extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      resources: [
+        {
+          id: '1',
+          title: 'Apples',
+          tags: ['food', 'fruit', 'fresh'],
+          description: 'yum 😋',
+          price: {
+            amount: 1,
+            currency: 'EUR',
+            quantity: {
+              amount: 1,
+              unit: 'kg'
+            }
+          },
+          quantity: {
+            amount: 100,
+            unit: 'kg'
+          },
+          place: {
+            id: '1',
+            name: 'Musterstr. 12',
+            address: 'Musterstr. 12, 12345 Berlin, Deutschland',
+            location: {
+              latitude: initialRegion.latitude,
+              longitude: initialRegion.longitude
+            },
+          }
+        }
+      ]
     };
   }
 
-  componentWillMount() {
-    this.getLocationAsync();
-  }
+  onLocationChange = (element) => {
+    const { latitude, longitude } = element.nativeEvent.coordinate;
+    this.props.setLocation({
+      latitude,
+      longitude,
+    });
+  };
 
-  getLocationAsync = async () => {
-    await Permissions.askAsync(Permissions.LOCATION);
-    const location = await Location.getCurrentPositionAsync({});
-    this.props.setLocation(location);
+  renderResources = () => {
+    const { resources } = this.state;
+    return resources.map((resource) => {
+      return <ResourceMarker key={resource.id} resource={resource} />;
+    });
   };
 
   render() {
-    const { location } = this.props;
-    console.log(location);
     return (
       <View style={styles.container}>
         <TouchableOpacity
@@ -40,13 +83,20 @@ class Map extends Component {
         </TouchableOpacity>
         <MapView
           style={styles.Map}
-          initialRegion={{
-            latitude: location.latitude,
-            longitude: location.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-        />
+          provider={PROVIDER_GOOGLE}
+          showsUserLocation
+          showsMyLocationButton
+          showsPointsOfInterest
+          showsCompass
+          showsBuildings
+          showsIndoors
+          mapType="satellite"
+          initialRegion={initialRegion}
+          onUserLocationChange={this.onLocationChange}
+          ref={(mapView) => { this.mapView = mapView; }}
+        >
+          {this.renderResources()}
+        </MapView>
       </View>
     );
   }
