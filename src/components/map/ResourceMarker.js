@@ -16,15 +16,16 @@ export default function ResourceMarker(props) {
 
   return (
     <Marker
-    title={title}
-    description={description}
     coordinate={coordinate}
     onCalloutPress={() => alert('Clicked')}
     >
+    <View style={{backgroundColor: "red", padding: 10}}>
+    <Text>{title}</Text>
+    </View>
     <MapView.Callout>
       <View>
       <Text>
-      {description}
+        {description}
       </Text>
       <Button title='Click Me!' onPress={() => console.log('Clicked')} />
       </View>
