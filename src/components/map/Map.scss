@@ -8,3 +8,24 @@
     width: 100%;
     background-color: lightgray;
 }
+
+.Button {
+    position: absolute;
+    bottom: 30;
+    right: 30;
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+    z-index: 99;
+    background-color: #126980;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    elevation: 5;
+
+    &__text {
+        color: white;        
+        font-size: 45px;
+        z-index: 100;
+    }
+}
