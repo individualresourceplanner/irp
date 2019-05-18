@@ -4,7 +4,7 @@ import { View, TouchableOpacity, Text } from 'react-native';
 import { MapView, Icon } from 'expo';
 import ResourceMarker from './ResourceMarker';
 import { setLocation, setResources } from '../../state/actionCreators';
-import { getResourceData } from '../../data/firebase';
+import { listenResources } from '../../data/firebase';
 import styles from './Map.scss';
 
 const { PROVIDER_GOOGLE } = MapView;
@@ -18,7 +18,10 @@ const initialRegion = {
 
 class Map extends Component {
   componentDidMount() {
-    this.updateResources();
+    // listen to changes to the resources collection
+    listenResources((resources) => {
+      this.props.setResources(resources);
+    });
   }
 
   onLocationChange = (element) => {
@@ -30,14 +33,6 @@ class Map extends Component {
     if (location !== this.props.location) {
       this.props.setLocation(location);
     }
-  };
-
-  updateResources = () => {
-    getResourceData().then((resources) => {
-      this.props.setResources(resources);
-    }).catch((e) => {
-      console.log('ERROR Failed to fetch resource data: ', e);
-    });
   };
 
   renderResources = () => {

@@ -11,9 +11,9 @@ export function addResource(resource) {
   return database.collection('Resources').add(resource);
 }
 
-export function getResourceData() {
-  return database.collection('Resources').get().then((querySnapshot) => {
-    console.log('fetched resources:');
+export function listenResources(callback) {
+  database.collection('Resources').onSnapshot((querySnapshot) => {
+    console.log('resources updated.');
     const resources = [];
     querySnapshot.forEach((doc) => {
       const resource = doc.data();
@@ -25,7 +25,7 @@ export function getResourceData() {
         console.warn('invalid resource: ', resource);
       }
     });
-    return resources;
+    callback(resources);
   });
 }
 
