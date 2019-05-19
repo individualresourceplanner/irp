@@ -8,7 +8,7 @@ To start the app run `yarn start`
 
 ## Live Protoype
 
-Check out the live prototype on your own iOS and Android device via the Expo Client App: (https://expo.io/@antonb/IndividualResourcePlanner)[https://expo.io/@antonb/IndividualResourcePlanner]
+Check out the live prototype on your own iOS and Android device via the Expo Client App: [https://expo.io/@antonb/IndividualResourcePlanner](https://expo.io/@antonb/IndividualResourcePlanner)
 
 ## Team Members
 
