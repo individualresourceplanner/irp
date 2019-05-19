@@ -50,10 +50,6 @@ export function listenAggregations(callback) {
 
 function validateResource(resource) {
   if (!resource.title) return false;
-  if (!resource.tags) return false;
-  if (!resource.description) return false;
-  if (!resource.place) return false;
-  if (!resource.place.location) return false;
-
+  if (!resource.location) return false;
   return true;
 }
