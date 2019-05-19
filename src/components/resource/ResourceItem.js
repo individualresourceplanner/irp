@@ -72,7 +72,7 @@ class ResourceItem extends Component {
       tags,
       description,
       priority,
-      image,
+      image
     } = this.state;
 
     const newItem = {
@@ -80,8 +80,8 @@ class ResourceItem extends Component {
       tags,
       description,
       location: {
-        lat: 11,
-        long: 11,
+        latitude: 11,
+        longitude: 11,
       },
       priority,
       image,
