@@ -6,11 +6,24 @@ import { View, Button, Text, StyleSheet} from 'react-native';
 const { Marker } = MapView;
 
 export default function ResourceMarker(props) {
-  const { 
+  const {
     resource, aggregations, removeFromSelected,
     addToSelected, selectedMarkers, isSelected
   } = props;
-  const { title, description, location, stock } = resource;
+  const { title, description, location, priority } = resource;
+
+  function bgColor() {
+    switch (priority) {
+      case 0:
+        return '#DCE775';
+      case 1:
+        return '#FCB900';
+      case 2:
+        return '#E91E63';
+      default:
+        return 'gray';
+    }
+  }
 
 
   const coordinate = {
@@ -41,19 +54,35 @@ export default function ResourceMarker(props) {
       coordinate={coordinate}
       onPress= {()=> this.toggleSelected() }
     >
-    <View style={
-      {
-        backgroundColor: "red", 
-          padding: 10
-      }}>
-        <Text>{title}</Text>
+    <View
+      style={{
+        backgroundColor: bgColor(),
+        padding: 10,
+        borderRadius: 25,
+        borderColor: 'white',
+        borderWidth: 1,
+      }}
+    >
+        <Text style={{
+          color: 'white',
+          fontSize: 15,
+        }}>{title}</Text>
       </View>
-      <MapView.Callout >
-        <View style={{backgroundColor: "white", padding: 3, minWidth: 200}}>
-          <Text style={styles.titleText}>
+      <MapView.Callout>
+        <View style={{
+          padding: 3,
+          minWidth: 200,
+        }}>
+          <Text style={{
+            color: 'darkgrey',
+            fontSize: 15,
+          }}>
             {title}{'\n'}
           </Text>
-          <Text>
+          <Text style={{
+            color: 'darkgrey',
+            fontSize: 13,
+          }}>
             Details: {description}{'\n'}
           </Text>
         </View>
