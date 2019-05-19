@@ -6,7 +6,7 @@ import { View, Button, Text, StyleSheet} from 'react-native';
 const { Marker } = MapView;
 
 export default function ResourceMarker(props) {
-  const { 
+  const {
     resource, aggregations, removeFromSelected,
     addToSelected, selectedMarkers, isSelected
   } = props;
@@ -43,17 +43,33 @@ export default function ResourceMarker(props) {
     >
     <View style={
       {
-        backgroundColor: "red", 
-          padding: 10
+        backgroundColor: resource === 0 ? "green" : resource === 1 ? "yellow" : resource === 2 ? "red" : "black",
+        padding: 10,
+        borderRadius: 10,
+        borderColor: 'white',
+        borderWidth: 2,
       }}>
-        <Text>{title}</Text>
+        <Text style={{
+          color: 'white',
+          fontSize: 15,
+        }}>{title}</Text>
       </View>
-      <MapView.Callout >
-        <View style={{backgroundColor: "white", padding: 3, minWidth: 200}}>
-          <Text style={styles.titleText}>
+      <MapView.Callout>
+        <View style={{
+          padding: 3,
+          minWidth: 200,
+        }}>
+          <Text style={{
+            color: 'darkgrey',
+            fontSize: 15,
+          }}>
             {title}{'\n'}
           </Text>
-          <Text>
+          <Text style={{
+            color: 'darkgrey',
+            fontSize: 13,
+          }}>
+            Amount: {stock.value} {stock.unit} {'\n'}
             Details: {description}{'\n'}
           </Text>
         </View>
