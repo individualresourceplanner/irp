@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, TouchableOpacity, Text } from 'react-native';
+import { View, TouchableOpacity, Text, StatusBar} from 'react-native';
 import { MapView, Icon } from 'expo';
 import ResourceMarker from './ResourceMarker';
 import { setLocation, setResources, setAggregations } from '../../state/actionCreators';
 import { listenResources, listenAggregations } from '../../data/firebase';
 import styles from './Map.scss';
+import FilterBar from './FilterBar';
+
 
 const { PROVIDER_GOOGLE } = MapView;
 
@@ -20,8 +22,8 @@ class Map extends Component {
 
   state = {
     selectedMarkers:new Set(),
+    filter: '',
   }
-
 
   componentDidMount() {
     // listen to changes to the resources collection
@@ -54,44 +56,67 @@ class Map extends Component {
     this.setState({selectedMarkers : selectedMarkers.delete(id) ? selectedMarkers: selectedMarkers})
   }
 
+
   renderResources = () => {
     const { resources, aggregations } = this.props;
+    filteredResources = this.filteredResources()
+    console.log(filteredResources)
     const { selectedMarkers } = this.state;
-    if (resources.length > 0) {
-      return resources.map((resource) => {
-        let memberInAggregations = []
-        aggregations.forEach((a)=>{
-          memberInAggregations.push(a.members)
-          })
-        return <ResourceMarker
-          key={resource.id}
-          resource={resource}
-          selectedMarkers={selectedMarkers}
-          isSelected={selectedMarkers.has(resource.id)}
-          addToSelected={this.addSelectedMarker}
-          removeFromSelected={this.removeSelectedMarker}
-          aggregations={memberInAggregations} />;
-      });
-    }
-    return null;
-  };
+    return filteredResources.map((resource) => {
+      let memberInAggregations = []
+      aggregations.forEach((a)=>{
+        memberInAggregations.push(a.members)
+      })
+      return <ResourceMarker
+      key={resource.id}
+      resource={resource}
+      selectedMarkers={selectedMarkers}
+      isSelected={selectedMarkers.has(resource.id)}
+      addToSelected={this.addSelectedMarker}
+      removeFromSelected={this.removeSelectedMarker}
+      aggregations={memberInAggregations} />;
+    });
+  }
 
+  onUpdateFilter = (value) => {
+    this.setState({ filter: value });
+  }
+
+  filteredResources = () => {
+    const { filter} = this.state;
+    const { resources} = this.props;
+    if (filter === '') {
+      return resources;
+    }
+
+    // strings to filter for (lowercase)
+    const filterStrings = filter.toLowerCase().split(' ')
+      .filter(filterString => filterString !== '');
+
+    // filter resources
+    return resources.filter((resource) => {
+      // create string from tags
+      const tagsString = resource.tags.join(' ').toLowerCase();
+
+      // include resources if all filterStrings are included in tags
+      return filterStrings.every((filterString) => {
+        return tagsString.includes(filterString);
+      });
+    });
+  }
 
   render() {
-    console.log("Redraw!")
-    console.log(this.state.selectedMarkers)
+    const { filter } = this.state;
+
     return (
       <View style={styles.container}>
-        <TouchableOpacity
-          style={[styles.Button, { bottom: 30, right: 30 }]}
-          onPress={() => this.props.navigation.navigate('Resource')}
-        >
-          <Text
-            style={styles.Button__text}
-          >
-            +
-          </Text>
+        <StatusBar backgroundColor="blue" barStyle="light-content" />
+        <TouchableOpacity 
+        style={[styles.Button, { bottom: 30, right: 30 }]}
+        onPress={() => this.props.navigation.navigate('Resource')}>
+        <Text style={styles.Button__text} > + </Text>
         </TouchableOpacity>
+
         <MapView
           style={styles.Map}
           provider={PROVIDER_GOOGLE}
@@ -108,6 +133,8 @@ class Map extends Component {
         >
           {this.renderResources()}
         </MapView>
+
+        <FilterBar value={filter} onUpdate={this.onUpdateFilter} />
       </View>
     );
   }
@@ -120,7 +147,7 @@ const mapDispatchToProps = dispatch => ({
   setAggregations: (aggregations) => { dispatch(setAggregations(aggregations)); },
 });
 
-function mapStateToProps(state) {
+const mapStateToProps = state => {
   return {
     location: state.location,
     resources: state.resources,
