@@ -87,7 +87,7 @@ class ResourceItem extends Component {
       tags,
       description,
       location,
-      priority,
+      priority: parseInt(priority, 10),
       image,
     };
 
