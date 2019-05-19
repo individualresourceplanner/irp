@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, TouchableOpacity, Text, StatusBar} from 'react-native';
-import { MapView, Icon } from 'expo';
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  StatusBar
+} from 'react-native';
+import { MapView } from 'expo';
 import ResourceMarker from './ResourceMarker';
-import { setLocation, setResources, setAggregations } from '../../state/actionCreators';
+import {
+  setLocation,
+  setResources,
+  setAggregations,
+  addAggregation,
+} from '../../state/actionCreators';
 import { listenResources, listenAggregations } from '../../data/firebase';
 import styles from './Map.scss';
 import FilterBar from './FilterBar';
@@ -19,9 +29,8 @@ const initialRegion = {
 };
 
 class Map extends Component {
-
   state = {
-    selectedMarkers:new Set(),
+    selectedMarkers: new Set(),
     filter: '',
   }
 
@@ -46,35 +55,43 @@ class Map extends Component {
     }
   };
 
-  addSelectedMarker = (id)=>{
-    let { selectedMarkers } = this.state
-    this.setState({selectedMarkers : selectedMarkers.add(id)})
+  addSelectedMarker = (id) => {
+    const { selectedMarkers } = this.state;
+    this.setState({
+      selectedMarkers: selectedMarkers.add(id)
+    });
   }
 
-  removeSelectedMarker = (id)=>{
-    let { selectedMarkers } = this.state
-    this.setState({selectedMarkers : selectedMarkers.delete(id) ? selectedMarkers: selectedMarkers})
+  removeSelectedMarker = (id) => {
+    const { selectedMarkers } = this.state;
+    this.setState({
+      selectedMarkers: selectedMarkers.delete(id)
+        ? selectedMarkers
+        : selectedMarkers
+    });
   }
 
 
   renderResources = () => {
-    const { resources, aggregations } = this.props;
-    filteredResources = this.filteredResources()
-    console.log(filteredResources)
+    const { aggregations } = this.props;
+    const filteredResources = this.filteredResources();
     const { selectedMarkers } = this.state;
     return filteredResources.map((resource) => {
-      let memberInAggregations = []
-      aggregations.forEach((a)=>{
-        memberInAggregations.push(a.members)
-      })
-      return <ResourceMarker
-      key={resource.id}
-      resource={resource}
-      selectedMarkers={selectedMarkers}
-      isSelected={selectedMarkers.has(resource.id)}
-      addToSelected={this.addSelectedMarker}
-      removeFromSelected={this.removeSelectedMarker}
-      aggregations={memberInAggregations} />;
+      const memberInAggregations = [];
+      aggregations.forEach((a) => {
+        memberInAggregations.push(a.members);
+      });
+      return (
+        <ResourceMarker
+          key={resource.id}
+          resource={resource}
+          selectedMarkers={selectedMarkers}
+          isSelected={selectedMarkers.has(resource.id)}
+          addToSelected={this.addSelectedMarker}
+          removeFromSelected={this.removeSelectedMarker}
+          aggregations={memberInAggregations}
+        />
+      );
     });
   }
 
@@ -83,8 +100,8 @@ class Map extends Component {
   }
 
   filteredResources = () => {
-    const { filter} = this.state;
-    const { resources} = this.props;
+    const { filter } = this.state;
+    const { resources } = this.props;
     if (filter === '') {
       return resources;
     }
@@ -111,10 +128,11 @@ class Map extends Component {
     return (
       <View style={styles.container}>
         <StatusBar backgroundColor="blue" barStyle="light-content" />
-        <TouchableOpacity 
-        style={[styles.Button, { bottom: 30, right: 30 }]}
-        onPress={() => this.props.navigation.navigate('Resource')}>
-        <Text style={styles.Button__text} > + </Text>
+        <TouchableOpacity
+          style={[styles.Button, { bottom: 30, right: 30 }]}
+          onPress={() => this.props.navigation.navigate('Resource')}
+        >
+          <Text style={styles.Button__text}> + </Text>
         </TouchableOpacity>
 
         <MapView
@@ -143,16 +161,16 @@ class Map extends Component {
 const mapDispatchToProps = dispatch => ({
   setLocation: (location) => { dispatch(setLocation(location)); },
   setResources: (resources) => { dispatch(setResources(resources)); },
-  addAggregations: (aggregations) => { dispatch(addAggregations(aggregations)); },
+  addAggregation: (aggregation) => { dispatch(addAggregation(aggregation)); },
   setAggregations: (aggregations) => { dispatch(setAggregations(aggregations)); },
 });
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     location: state.location,
     resources: state.resources,
     aggregations: state.aggregations,
   };
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Map);

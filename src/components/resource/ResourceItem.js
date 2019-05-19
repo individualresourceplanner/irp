@@ -3,16 +3,10 @@ import {
   ScrollView,
   Text,
   View,
-  Picker,
   TextInput,
   TouchableOpacity,
   Image,
-  KeyboardAvoidingView,
-  SafeAreaView,
-  TouchableWithoutFeedback,
-  Keyboard,
 } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Entypo';
 import { connect } from 'react-redux';
@@ -77,7 +71,6 @@ class ResourceItem extends Component {
       title,
       tags,
       description,
-      location,
       priority,
       image,
     } = this.state;
@@ -101,6 +94,7 @@ class ResourceItem extends Component {
 
     addResource(newItem);
     this.props.navigation.navigate('Map');
+    return true;
   };
 
   handleTags = () => {
@@ -204,7 +198,10 @@ class ResourceItem extends Component {
               />
               <TouchableOpacity
                 onPress={this.togglePriority}
-                style={[styles.Container__Row__Col__Priority, { backgroundColor: colors[priority].color }]}
+                style={[
+                  styles.Container__Row__Col__Priority,
+                  { backgroundColor: colors[priority].color }
+                ]}
               >
                 <Icon
                   style={styles.Container__Row__Col__Priority__Icon}
