@@ -208,10 +208,19 @@ class ResourceItem extends Component {
               </TouchableOpacity>
             )}
             <View style={styles.Container__Row__Col}>
-              <Button
-                title="choose location"
+              <TouchableOpacity
                 onPress={this.chooseLocation}
-              />
+                style={styles.Container__Row__Col__Priority}
+              >
+                <Icon
+                  style={styles.Container__Row__Col__Priority__Icon}
+                  name="location"
+                  size={22}
+                />
+                <Text style={styles.Container__Row__Col__Priority__Text}>
+                  Location
+                </Text>
+              </TouchableOpacity>
               <TouchableOpacity
                 onPress={this.togglePriority}
                 style={[
