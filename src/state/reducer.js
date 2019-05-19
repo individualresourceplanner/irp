@@ -3,6 +3,7 @@ import * as actionTypes from './actionTypes';
 const initialState = {
   location: {},
   resources: [],
+  aggregations: [],
 };
 
 function reducer(state = initialState, action) {
@@ -17,6 +18,16 @@ function reducer(state = initialState, action) {
       return {
         ...state,
         resources: action.resources,
+      };
+    case actionTypes.ADD_AGGREGATION:
+      return {
+        ...state,
+        aggregations: aggregations.push(action.aggregation)
+      };
+    case actionTypes.SET_AGGREGATIONS:
+      return {
+        ...state,
+        aggregations: action.aggregations
       };
 
     default:
