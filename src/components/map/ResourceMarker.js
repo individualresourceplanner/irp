@@ -10,7 +10,20 @@ export default function ResourceMarker(props) {
     resource, aggregations, removeFromSelected,
     addToSelected, selectedMarkers, isSelected
   } = props;
-  const { title, description, location, stock } = resource;
+  const { title, description, location, priority } = resource;
+
+  function bgColor() {
+    switch (priority) {
+      case 0:
+        return '#DCE775';
+      case 1:
+        return '#FCB900';
+      case 2:
+        return '#E91E63';
+      default:
+        return 'gray';
+    }
+  }
 
 
   const coordinate = {
@@ -41,14 +54,15 @@ export default function ResourceMarker(props) {
       coordinate={coordinate}
       onPress= {()=> this.toggleSelected() }
     >
-    <View style={
-      {
-        backgroundColor: resource === 0 ? "green" : resource === 1 ? "yellow" : resource === 2 ? "red" : "black",
+    <View
+      style={{
+        backgroundColor: bgColor(),
         padding: 10,
-        borderRadius: 10,
+        borderRadius: 25,
         borderColor: 'white',
-        borderWidth: 2,
-      }}>
+        borderWidth: 1,
+      }}
+    >
         <Text style={{
           color: 'white',
           fontSize: 15,
@@ -69,7 +83,6 @@ export default function ResourceMarker(props) {
             color: 'darkgrey',
             fontSize: 13,
           }}>
-            Amount: {stock.value} {stock.unit} {'\n'}
             Details: {description}{'\n'}
           </Text>
         </View>
