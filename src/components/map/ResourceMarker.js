@@ -43,7 +43,7 @@ export default function ResourceMarker(props) {
     >
     <View style={
       {
-        backgroundColor: isSelected?"red": "yellow", 
+        backgroundColor: "red", 
           padding: 10
       }}>
         <Text>{title}</Text>
