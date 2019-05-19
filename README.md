@@ -8,7 +8,7 @@ To start the app run `yarn start`
 
 ## Team Members
 
-* Luise Benkert
-* Jakob Krause
-* Tom Gülenman
-* Anton Begehr
+* [Luise Benkert](https://github.com/luisebenkert)
+* [Jakob Krause](https://github.com/garlicPasta)
+* [Tom Gülenman](https://github.com/tguelenman)
+* [Anton Begehr](https://github.com/abegehr)
