@@ -6,6 +6,9 @@ export default function FilterBar(props) {
   const { value, onUpdate } = props;
   return (
     <SearchBar
+      inputContainerStyle={{
+        backgroundColor: 'white',
+      }}
       containerStyle={styles.containerStyle}
       lightTheme
       placeholder="Filter resources…"

@@ -55,7 +55,7 @@ class ResourceItem extends Component {
       tags: [],
       description: '',
       location: '',
-      priority: '0',
+      priority: 0,
       image: null,
       currentTag: '',
       errorMessage: '',
