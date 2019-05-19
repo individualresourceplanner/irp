@@ -34,29 +34,17 @@ export default class LocationPicker extends Component {
     return Location.getCurrentPositionAsync({});
   };
 
-  onDragStart = (e) => {
-    const { coordinate } = e.nativeEvent;
-    this.setState({ coordinate });
-    // console.log('onDragStart: ', coordinate);
-  }
-
-  onDrag = (e) => {
-    const { coordinate } = e.nativeEvent;
-    this.setState({ coordinate });
-    // console.log('onDrag: ', coordinate);
-  }
-
   onDragEnd = (e) => {
     const { coordinate } = e.nativeEvent;
     this.setState({ coordinate });
     // console.log('onDragEnd: ', coordinate);
   }
 
-  select = () => {
+  pressSelect = () => {
     const { coordinate } = this.state;
     console.log('selected location: ', coordinate);
     const { callback } = this.props;
-    if (callback) callback(coordinate);
+    callback(coordinate);
   }
 
   render() {
@@ -78,22 +66,18 @@ export default class LocationPicker extends Component {
           showsBuildings
           showsIndoors
           mapType="satellite"
-          followsUserLocation
           ref={(mapView) => { this.mapView = mapView; }}
         >
           <Marker
             draggable
             coordinate={coordinate}
-            onDragStart={this.onDragStart}
-            onDrag={this.onDrag}
             onDragEnd={this.onDragEnd}
           />
         </MapView>
 
         <Button
-          style={styles.select}
-          onPress={this.select}
           title="Select"
+          onPress={this.pressSelect}
         />
       </View>
     );

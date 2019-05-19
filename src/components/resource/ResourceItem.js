@@ -15,6 +15,8 @@ import { setResources } from '../../state/actionCreators';
 import { addResource } from '../../data/firebase';
 import FormInput from './FormInput';
 import styles from './ResourceItem.scss';
+import LocationPicker from './LocationPicker';
+
 
 /*
 
@@ -54,11 +56,15 @@ class ResourceItem extends Component {
       title: '',
       tags: [],
       description: '',
-      location: '',
+      location: {
+        latitude: 11,
+        longitude: 11,
+      },
       priority: '0',
       image: null,
       currentTag: '',
       errorMessage: '',
+      showLocationPicker: false
     };
 
     this.openCamera = this.openCamera.bind(this);
@@ -72,17 +78,15 @@ class ResourceItem extends Component {
       tags,
       description,
       priority,
-      image
+      image,
+      location
     } = this.state;
 
     const newItem = {
       title,
       tags,
       description,
-      location: {
-        latitude: 11,
-        longitude: 11,
-      },
+      location,
       priority,
       image,
     };
@@ -128,6 +132,15 @@ class ResourceItem extends Component {
     }));
   }
 
+  chooseLocation = () => {
+    this.setState({ showLocationPicker: true });
+  }
+
+  selectLocation = (location) => {
+    console.log('chose location: ', location);
+    this.setState({ location, showLocationPicker: false });
+  }
+
   async openCamera() {
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: false,
@@ -149,11 +162,17 @@ class ResourceItem extends Component {
       image,
       currentTag,
       errorMessage,
+      showLocationPicker
     } = this.state;
 
     const imageSource = image
       ? { uri: image }
       : require('../../assets/camera.png');
+
+    let locationPicker = null;
+    if (showLocationPicker) {
+      locationPicker = <LocationPicker callback={this.selectLocation} />;
+    }
 
     return (
       <View style={styles.Outer}>
@@ -189,12 +208,9 @@ class ResourceItem extends Component {
               </TouchableOpacity>
             )}
             <View style={styles.Container__Row__Col}>
-              <FormInput
-                placeholder={'Location'}
-                title={location}
-                onChange={(text) => { this.setState({ location: text }); }}
-                Icon={'location'}
-                style={[styles.Container__Row__Col__Item, { marginBottom: 10 }]}
+              <Button
+                title="choose location"
+                onPress={this.chooseLocation}
               />
               <TouchableOpacity
                 onPress={this.togglePriority}
@@ -257,6 +273,7 @@ class ResourceItem extends Component {
             onPress={this.onSubmit}
           />
         </ScrollView>
+        {locationPicker}
       </View>
     );
   }
