@@ -10,12 +10,12 @@ export default function ResourceMarker(props) {
     resource, aggregations, removeFromSelected,
     addToSelected, selectedMarkers, isSelected
   } = props;
-  const { title, description, place, stock } = resource;
+  const { title, description, location, stock } = resource;
 
 
   const coordinate = {
-    latitude: place.location.latitude,
-    longitude: place.location.longitude
+    latitude: location.latitude,
+    longitude: location.longitude
   };
 
   const styles = StyleSheet.create({
@@ -54,9 +54,7 @@ export default function ResourceMarker(props) {
             {title}{'\n'}
           </Text>
           <Text>
-            Amount: {stock.value} {stock.unit} {'\n'}
             Details: {description}{'\n'}
-            IsAggregated: {aggregations}{'\n'}
           </Text>
         </View>
       </MapView.Callout>

@@ -1,0 +1,101 @@
+.Map {
+    height: 100%;
+    width: 100%;
+    background-color: lightgray;
+}
+
+.ResourceForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background-color: lightgray;
+}
+
+.FormLine {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.InputField{
+  width: 300px;
+}
+
+.Container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #F5FCFF;
+    padding: 10%;
+}
+
+.NecessaryView {
+    display: flex;
+    background-color: #F5FCFF;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.NecessaryViewHorizontal {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    background-color: #F5FCFF;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.InputFull{
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+}
+
+.InputHalf{
+    width: 45%;
+}
+
+.InputMax{
+    flex-grow: 2;
+}
+
+.InputBox{
+    margin-top: 10px;
+    height: 100px;
+    width: 100%;
+    border-color: gray;
+    border-radius: 10px;
+    border-width: 1px;
+    padding: 10px;
+    font-size: 18px;
+}
+
+.Picker{
+    width: 35%;
+}
+
+.AddPhotoButton{
+    margin-top: 10px;
+    background-color: orange;
+    border-radius: 10px;
+    width: 60px;
+    height: 50px;
+    margin-right: 10px;
+}
+
+.PublishButton{
+    margin-top: 10px;
+    background-color: orange;
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    height: 50px;
+}

@@ -22,7 +22,7 @@ function reducer(state = initialState, action) {
     case actionTypes.ADD_AGGREGATION:
       return {
         ...state,
-        aggregations: aggregations.push(action.aggregation)
+        aggregations: state.aggregations.push(action.aggregation)
       };
     case actionTypes.SET_AGGREGATIONS:
       return {

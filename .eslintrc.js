@@ -12,6 +12,7 @@ module.exports = {
       'react/jsx-curly-brace-presence': 'off',
       'react/destructuring-assignment': 'off',
       'arrow-body-style': 'off',
+      'global-require': 'off',
     },
     'globals': {
       "fetch": false
